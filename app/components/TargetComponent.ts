@@ -1,13 +1,14 @@
 import { IComponent } from "../engine/interfaces/IComponent";
 import { ComponentBase } from "../engine/models/ComponentBase";
-import { Renderer } from "../engine/Renderer";
 import { ImageLoader } from "../engine/helpers/ImageLoader";
 import { Box } from "../engine/models/Box";
 import { InputManager } from "../engine/helpers/InputManager";
+import { RendererManager } from "../engine/helpers/RendererManager";
+import { GAME_LAYERS } from "../ShooterGame";
 
 export class TargetComponent extends ComponentBase implements IComponent {
 
-    name: string = "TargetComponent";
+    name: string;
     position: Box = new Box(0, 0, 50, 47);
 
     onUpdate(): void {
@@ -18,7 +19,8 @@ export class TargetComponent extends ComponentBase implements IComponent {
 
     onRender(): void {
         const from = new Box(0, 0, 200, 188);
-        Renderer.drawImageFromCenterPoint(ImageLoader.images.target, from, this.position);
+        var renderer = RendererManager.rendererFromLayer(GAME_LAYERS.TARGET);
+        renderer.drawImageFromCenterPoint(ImageLoader.images.target, from, this.position);
     }
 
 }

@@ -9,6 +9,7 @@ export class ComponentManager implements IComponentManager {
     registerComponent(name: string, component: IComponent): void {
         if (this.componentsByName[name])
             throw new Error(`Component '${name}' already exists.`);
+        component.name = name;
         this.activeComponents.push(component);
         this.componentsByName[name] = component;
     }

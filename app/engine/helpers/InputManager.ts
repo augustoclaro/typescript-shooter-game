@@ -6,7 +6,7 @@ export class InputManager {
     static MousePosition: Vector = new Vector();
 
     static startListeningToEvents() {
-        Game.GameCanvas.addEventListener('mousemove', ev => {
+        Game.GameCanvas.Element.addEventListener('mousemove', ev => {
             this.MousePosition.X = ev.offsetX;
             this.MousePosition.Y = ev.offsetY;
         });

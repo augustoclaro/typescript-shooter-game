@@ -2,13 +2,15 @@ import { StateManager } from "./helpers/StateManager";
 import { ComponentManager } from "./helpers/ComponentManager";
 import { IState } from "./interfaces/IState";
 import { GameLoop } from "./GameLoop";
-import { Renderer } from "./Renderer";
 import { ImageLoader } from "./helpers/ImageLoader";
 import { InputManager } from "./helpers/InputManager";
+import { Canvas } from "./models/Canvas";
+import { RendererManager } from "./helpers/RendererManager";
 
 export type GameOptions = {
     width: number,
     height: number,
+    fps: number,
     states: IState[],
     initialState?: string,
     images?: { [key: string]: string }
@@ -18,15 +20,15 @@ export class Game {
     static StateManager: StateManager = new StateManager();
     static ComponentManager: ComponentManager = new ComponentManager();
 
-    static GameCanvas: HTMLCanvasElement;
+    static GameCanvas: Canvas;
     static GameOptions: GameOptions;
 
-    static start(canvas: HTMLCanvasElement, options: GameOptions) {
-        this.GameCanvas = canvas;
+    static start(options: GameOptions) {
         this.GameOptions = options;
 
-        // Set the canvas to the renderer
-        Renderer.setTarget(canvas);
+        // Create game canvas
+        this.GameCanvas = new Canvas(`game-canvas-${Date.now()}`, options.width, options.height);
+        document.body.appendChild(this.GameCanvas.Element);
 
         // Register states
         (options.states || []).forEach(s => this.StateManager.registerState(s));
@@ -69,11 +71,10 @@ export class Game {
         this.ComponentManager.getActiveComponents()
             .forEach(c => c.onUpdate && c.onUpdate());
 
-        Renderer.setTarget(this.GameCanvas);
-        Renderer.clear();
-
+        RendererManager.clear();        
         this.ComponentManager.getActiveComponents()
             .forEach(c => c.onRender && c.onRender());
+        RendererManager.renderToGameCanvas();
     }
 
 }

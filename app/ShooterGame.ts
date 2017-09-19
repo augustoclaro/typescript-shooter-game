@@ -1,26 +1,19 @@
 import { Game } from "./engine/Game";
 import { MainState } from "./states/MainState";
 
+export const GAME_LAYERS = {
+    SKY: 0,
+    BALLOONS: 1,
+    TARGET: 2
+};
+
 export class ShooterGame {
 
-    constructor(private width: number, private height: number) {
-    }
-
-    createCanvas(id: string): HTMLCanvasElement {
-        const canvas = document.createElement('canvas');
-        canvas.width = this.width;
-        canvas.height = this.height;
-        canvas.id = id;
-        return canvas;
-    }
-
     boot() {
-        const gameCanvas = this.createCanvas('gameCanvas');
-        document.body.appendChild(gameCanvas);
-
-        Game.start(gameCanvas, {
-            width: this.width,
-            height: this.height,
+        Game.start({
+            width: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+            height: Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
+            fps: 50,
             states: [
                 new MainState()
             ],

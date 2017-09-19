@@ -3,6 +3,7 @@ import { IState } from "../engine/interfaces/IState";
 import { TargetComponent } from "../components/TargetComponent";
 import { SkyComponent } from "../components/SkyComponent";
 import { BalloonComponent } from "../components/BalloonComponent";
+import { ImageLoader } from "../engine/helpers/ImageLoader";
 
 export class MainState extends StateBase implements IState {
 
@@ -20,9 +21,10 @@ export class MainState extends StateBase implements IState {
 
     private createBalloon() {
         const now = performance.now();
-        if (!this.lastBalloonCreatedAt || (now - this.lastBalloonCreatedAt) >= 2000) {
+        if (!this.lastBalloonCreatedAt || (now - this.lastBalloonCreatedAt) >= 200) {
             this.lastBalloonCreatedAt = now;
-            const balloonX = this.getRandomInt(0, 800);
+            const halfBalloonWidth = ImageLoader.images.balloon.width / 2;
+            const balloonX = this.getRandomInt(-halfBalloonWidth, 800 - halfBalloonWidth);
             this.ComponentManager.registerComponent('BalloonComponent' + now, new BalloonComponent(balloonX));
         }
     }
